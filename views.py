@@ -16,7 +16,7 @@ class Towers:
 
 class Contact:
     def __call__(self, request):
-        return '200 OK', 'Call me*)'
+        return '200 OK', render('contact.html', data=request.get('data', None))
 
 
 # class NotFound404:

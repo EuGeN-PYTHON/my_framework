@@ -1,4 +1,5 @@
 import quopri
+from nst_framework.requster import ParamRequster
 
 
 class PageNotFound404:
@@ -22,13 +23,29 @@ class Framework:
         if not path.endswith('/'):
             path = f'{path}/'
 
+        request = {}
+        method = environ['REQUEST_METHOD']
+        request['method'] = method
+
+        if method == 'POST':
+            param = ParamRequster().get_post_params(environ)
+            param = Framework.decode_value(param)
+            request['data'] = param
+
+        elif method == 'GET':
+            param = ParamRequster.get_param(environ)
+            request['data'] = param
+        print(request)
+
+
+
         # находим нужный контроллер
         # отработка паттерна page controller
         if path in self.routes_lst:
             view = self.routes_lst[path]
         else:
             view = PageNotFound404()
-        request = {}
+        # request = {}
         # наполняем словарь request элементами
         # этот словарь получат все контроллеры
         # отработка паттерна front controller
