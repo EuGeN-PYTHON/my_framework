@@ -20,8 +20,8 @@ class Framework:
         path = environ['PATH_INFO']
 
         # добавление закрывающего слеша
-        if not path.endswith('/'):
-            path = f'{path}/'
+        # if not path.endswith('/'):
+        #     path = f'{path}/'
 
         request = {}
         method = environ['REQUEST_METHOD']

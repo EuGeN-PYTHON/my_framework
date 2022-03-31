@@ -4,7 +4,7 @@ from wsgiref.simple_server import make_server
 
 application = Framework(routes, fronts)
 
-PORT = 8080
+PORT = 8880
 HOST = '127.0.0.1'
 
 with make_server('', PORT, application) as serv:

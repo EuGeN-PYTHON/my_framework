@@ -10,8 +10,13 @@ def secret_front(request):
 def other_front(request):
     request['key'] = 'key'
 
+def style(request):
+    with open('templates/css/style.css') as file:
+        css_file = file.read()
+    request['style'] = css_file
 
-fronts = [secret_front, other_front]
+
+fronts = [secret_front, other_front, style]
 
 routes = {
     '/': Index(),

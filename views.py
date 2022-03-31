@@ -3,7 +3,7 @@ from nst_framework.templator import render
 
 class Index:
     def __call__(self, request):
-        return '200 OK', render('index.html', data=request.get('data', None))
+        return '200 OK', render('main.html', style=request.get('style', None), data=request.get('data', None))
 
 
 class About:
