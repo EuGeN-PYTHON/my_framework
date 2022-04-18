@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}
+	TOWERS
+{% endblock %}
+{% block style %}
+	{% include "style.html" %}
+{% endblock %}
+{% block menu %}
+	{% include "menu.html" %}
+{% endblock %}
+{% block body %}
+	<div>
+		<a href="/create-type/">Создать новый тип</a>
+	</div>
+	<div>
+		<h1>Список существующих типов</h1>
+        {% for item in objects_list %}
+        <li>
+            {{item.name}} <span>Количество объектов: {{item.objects_count()}}</span>
+			<a href="/towers-list/?id={{item.id}}">Показать объекты</a>
+        </li>
+        {% endfor %}
+	</div>
+{% endblock %}
+{% block footer %}
+	{% include "footer.html" %}
+{% endblock %}
