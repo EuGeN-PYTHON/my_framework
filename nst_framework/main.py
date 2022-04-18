@@ -34,7 +34,7 @@ class Framework:
 
         elif method == 'GET':
             param = ParamRequster.get_param(environ)
-            request['data'] = param
+            request['request_params'] = param
         print(request)
 
 

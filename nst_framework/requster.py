@@ -3,11 +3,12 @@ class ParamRequster:
     @staticmethod
     def get_dict(data):
         dict = {}
-        data = data.split('&')
-        for i in data:
-            k, val = i.split('=')
-            dict[k] = val
-        return dict
+        if data:
+            data = data.split('&')
+            for i in data:
+                k, val = i.split('=')
+                dict[k] = val
+            return dict
 
     @staticmethod
     def get_param(env):
