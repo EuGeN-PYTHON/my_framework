@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}
+Список объектов
+{% endblock %}
+{% block style %}
+	{% include "style.html" %}
+{% endblock %}
+{% block menu %}
+	{% include "menu.html" %}
+{% endblock %}
+{% block body %}
+    <div>
+        <a href="/towers/">назад</a>
+    </div>
+
+    <br>
+    <br>
+
+    <div>
+        <a href="/create-object/?id={{id}}">Создать новый объект</a>
+        <br>
+        <h1>Список объектов для типа "{{name}}"</h1>
+        {% for item in objects_list %}
+        <li>
+            {{item.name}} <span><a href="/copy-object/?name={{item.name}}">скопировать</a></span>
+        </li>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block footer %}
+	{% include "footer.html" %}
+{% endblock %}
