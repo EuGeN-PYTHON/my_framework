@@ -18,6 +18,7 @@
         <li>
             {{item.name}} <span>Количество объектов: {{item.objects_count()}}</span>
 			<a href="/towers-list/?id={{item.id}}">Показать объекты</a>
+			<a href="/create-type/?id={{item.id}}">Создать подкатегорию {{item.name}}</a>>
         </li>
         {% endfor %}
 	</div>

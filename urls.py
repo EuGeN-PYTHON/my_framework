@@ -19,14 +19,14 @@ def other_front(request):
 
 fronts = [secret_front, other_front]
 
-routes = {
-    '/': Index(),
-    '/about/': About(),
-    '/contact/': Contact(),
-    '/towers/': Towers(),
-    '/towers-list/': TowersList(),
-    '/create-object/': CreateObject(),
-    '/create-type/': CreateType(),
-    '/type-list/': TypeList(),
-    '/copy-object/': CopyObject()
-}
+# routes = {
+#     '/': Index(),
+#     '/about/': About(),
+#     '/contact/': Contact(),
+#     '/towers/': Towers(),
+#     '/towers-list/': TowersList(),
+#     '/create-object/': CreateObject(),
+#     '/create-type/': CreateType(),
+#     '/type-list/': TypeList(),
+#     '/copy-object/': CopyObject()
+# }
