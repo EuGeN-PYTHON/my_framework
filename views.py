@@ -4,9 +4,13 @@ from datetime import date
 from nst_framework.templator import render
 from main_pattern.engine_project import Engine, Logger
 from main_pattern.decors_project import GetDebug, GetRoute
+from main_pattern.notifier_project import EmailNotifier, SmsNotifier, \
+    TemplateView, ListView, CreateView, BaseSerializer
 
 site = Engine()
 logger = Logger('main')
+email_notifier = EmailNotifier()
+sms_notifier = SmsNotifier()
 
 routes = {}
 
@@ -99,6 +103,8 @@ class CreateObject:
             if self.type_id != -1:
                 typeobject = site.find_type_by_id(int(self.type_id))
                 object = site.create_object('pillar', typeobject, name)
+                object.observers.append(email_notifier)
+                object.observers.append(sms_notifier)
                 site.objects.append(object)
 
             return '200 OK', render('tower_list.html', objects_list=typeobject.objects,
@@ -130,12 +136,12 @@ class CreateType:
             name = site.decode_value(name)
             # type_id = data.get('category_id')
 
-            type = None
+            type_object = None
 
-            new_type = site.create_type(name, type)
+            new_type = site.create_type(name, type_object)
             if self.type_id != None:
-                type = site.find_type_by_id(int(self.type_id))
-                type.typeobject = new_type
+                type_object = site.find_type_by_id(int(self.type_id))
+                type_object.typeobject = new_type
 
             site.typeobject.append(new_type)
 
@@ -143,3 +149,48 @@ class CreateType:
         else:
             typeobject = site.typeobject
             return '200 OK', render('create_type.html', categories=typeobject)
+
+
+@GetRoute(routes=routes, url='/client-list/')
+class ClientListView(ListView):
+    queryset = site.clients
+    template_name = 'client_list.html'
+
+
+@GetRoute(routes=routes, url='/create-client/')
+class ClientCreateView(CreateView):
+    template_name = 'create_client.html'
+
+    def create_obj(self, data: dict):
+        name = data['name']
+        name = site.decode_value(name)
+        email = data['email']
+        new_client = site.create_user('client', name, email)
+        site.clients.append(new_client)
+
+
+@GetRoute(routes=routes, url='/add-client/')
+class AddClientByObjectCreateView(CreateView):
+    template_name = 'add_client.html'
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['objects'] = site.objects
+        context['clients'] = site.clients
+        return context
+
+    def create_obj(self, data: dict):
+        object_name = data['object_name']
+        object_name = site.decode_value(object_name)
+        object = site.get_object(object_name)
+        client_name = data['client_name']
+        client_name = site.decode_value(client_name)
+        client = site.get_student(client_name)
+        object.add_client(client)
+
+
+@GetRoute(routes=routes, url='/api/')
+class ObjectApi:
+    @GetDebug(name='ObjectApi')
+    def __call__(self, request):
+        return '200 OK', BaseSerializer(site.objects).save()

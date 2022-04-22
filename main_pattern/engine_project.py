@@ -1,9 +1,11 @@
 import copy
 import quopri
-
+from main_pattern.notifier_project import ConsoleWriter, Subject
 
 class User:
-    pass
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
 
 
 class Worker(User):
@@ -11,7 +13,9 @@ class Worker(User):
 
 
 class Client(User):
-    pass
+    def __init__(self, name, email):
+        self.objects = []
+        super().__init__(name, email)
 
 
 class UserFactory:
@@ -21,8 +25,8 @@ class UserFactory:
     }
 
     @classmethod
-    def create(cls, type_):
-        return cls.types[type_]()
+    def create(cls, type_, name, email):
+        return cls.types[type_](name, email)
 
 
 class ObjectPrototype:
@@ -31,17 +35,27 @@ class ObjectPrototype:
         return copy.deepcopy(self)
 
 
-class Object(ObjectPrototype):
+class Object(ObjectPrototype, Subject):
 
     # инициализация объекта при создании
-    def __init__(self,  typeobject, name=None, vk_num=None, t2_num=None, mf_num=None, mt_num=None):
+    def __init__(self, typeobject, name):
         self.name = name
-        self.vk_num = vk_num
-        self.t2_num = t2_num
-        self.mf_num = mf_num
-        self.mt_num = mt_num
+        # self.vk_num = vk_num
+        # self.t2_num = t2_num
+        # self.mf_num = mf_num
+        # self.mt_num = mt_num
         self.typeobject = typeobject
         self.typeobject.objects.append(self)
+        self.clients = []
+        super().__init__()
+
+    def __getitem__(self, item):
+        return self.clients[item]
+
+    def add_client(self, client: Client):
+        self.clients.append(client)
+        client.objects.append(self)
+        self.notify()
 
 
 # Объект конструктива опора/столб
@@ -95,14 +109,12 @@ class Engine:
         self.typeobject = []
 
     @staticmethod
-    def create_user(type_):
-        return UserFactory.create(type_)
+    def create_user(type_, name, email):
+        return UserFactory.create(type_, name, email)
 
     @staticmethod
     def create_type(name, typeobject=None):
         return TypeObject(name, typeobject)
-
-
 
     def find_type_by_id(self, id):
         for item in self.typeobject:
@@ -120,6 +132,11 @@ class Engine:
             if item.name == name:
                 return item
         return None
+
+    def get_student(self, name) -> Client:
+        for item in self.clients:
+            if item.name == name:
+                return item
 
     @staticmethod
     def decode_value(val):
@@ -150,9 +167,10 @@ class SingletonByName(type):
 
 class Logger(metaclass=SingletonByName):
 
-    def __init__(self, name):
+    def __init__(self, name, writer=ConsoleWriter()):
         self.name = name
+        self.writer = writer
 
-    @staticmethod
-    def log(text):
+    def log(self, text):
         print('log--->', text)
+        self.writer.write(text)
