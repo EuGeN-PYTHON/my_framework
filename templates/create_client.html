@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}
+	TOWERS
+{% endblock %}
+{% block style %}
+	{% include "style.html" %}
+{% endblock %}
+{% block menu %}
+	{% include "menu.html" %}
+{% endblock %}
+{% block body %}
+	<div>
+		<li>
+			<a href="/towers/">Список существующих типов</a>
+		</li>
+		<li>
+			<a href="/client-list/">Список клиентов</a>
+		</li>
+		<li>
+			<a href="/add-client/">Добавить оператора на объект</a>
+		</li>
+	</div>
+
+    <div>
+        <h1>Создать клиента</h1>
+        <form method="post">
+            <input type="text" name="name" placeholder="Наименование">
+            <input type="email" name="email" placeholder="E-MAIL">
+            <button type="submit">Сохранить</button>
+        </form>
+    </div>
+{% endblock %}
+{% block footer %}
+	{% include "footer.html" %}
+{% endblock %}

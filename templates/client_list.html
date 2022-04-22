@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}
+	TOWERS
+{% endblock %}
+{% block style %}
+	{% include "style.html" %}
+{% endblock %}
+{% block menu %}
+	{% include "menu.html" %}
+{% endblock %}
+{% block body %}
+	<div>
+        <li>
+			<a href="/towers/">Список существующих типов</a>
+		</li>
+		<li>
+			<a href="/create-client/">Создать клиента</a>
+		</li>
+		<li>
+			<a href="/add-client/">Добавить оператора на объект</a>
+		</li>
+	</div>
+    <h1>Список клиентов</h1>
+    <div>
+
+        {% for item in objects_list %}
+        <li>
+            {{item.name}}
+            {{item.email}}
+            {% for object in item.objects %}
+                {{object.name}}
+            {% endfor %}
+        </li>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block footer %}
+	{% include "footer.html" %}
+{% endblock %}
