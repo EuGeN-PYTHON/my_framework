@@ -1,16 +1,19 @@
-import inspect
 from datetime import date
 
 from nst_framework.templator import render
-from main_pattern.engine_project import Engine, Logger
+from main_pattern.engine_project import Engine, Logger, MapperRegistry
 from main_pattern.decors_project import GetDebug, GetRoute
 from main_pattern.notifier_project import EmailNotifier, SmsNotifier, \
     TemplateView, ListView, CreateView, BaseSerializer
+from main_pattern.unit_of_work import UnitOfWork
 
 site = Engine()
 logger = Logger('main')
 email_notifier = EmailNotifier()
 sms_notifier = SmsNotifier()
+UnitOfWork.new_current()
+UnitOfWork.get_current().set_mapper_registry(MapperRegistry)
+
 
 routes = {}
 
@@ -153,9 +156,12 @@ class CreateType:
 
 @GetRoute(routes=routes, url='/client-list/')
 class ClientListView(ListView):
-    queryset = site.clients
+    # queryset = site.clients
     template_name = 'client_list.html'
 
+    def get_queryset(self):
+        mapper = MapperRegistry.get_current_mapper('client')
+        return mapper.all()
 
 @GetRoute(routes=routes, url='/create-client/')
 class ClientCreateView(CreateView):
@@ -167,6 +173,8 @@ class ClientCreateView(CreateView):
         email = data['email']
         new_client = site.create_user('client', name, email)
         site.clients.append(new_client)
+        new_client.mark_new()
+        UnitOfWork.get_current().commit()
 
 
 @GetRoute(routes=routes, url='/add-client/')
