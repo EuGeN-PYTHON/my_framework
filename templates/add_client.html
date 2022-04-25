@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}
+	TOWERS
+{% endblock %}
+{% block style %}
+	{% include "style.html" %}
+{% endblock %}
+{% block menu %}
+	{% include "menu.html" %}
+{% endblock %}
+{% block body %}
+	<div>
+        <li>
+			<a href="/towers/">Список существующих типов</a>
+		</li>
+		<li>
+			<a href="/client-list/">Список клиентов</a>
+		</li>
+		<li>
+			<a href="/create-client/">Создать клиента</a>
+		</li>
+	</div>
+    <h1>Добавление клиента на объект</h1>
+    <form method="POST">
+        <select size="3" name="object_name">
+            {% for item in objects %}
+            <option value="{{item.name}}">{{item.name}}</option>
+            {% endfor %}
+        </select>
+        <select size="3" name="client_name">
+            {% for item in clients %}
+            <option value="{{item.name}}">{{item.name}}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Добавить</button>
+    </form>
+{% endblock %}
+{% block footer %}
+	{% include "footer.html" %}
+{% endblock %}

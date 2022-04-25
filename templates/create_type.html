@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}
+Создание типа объекта
+{% endblock %}
+{% block style %}
+	{% include "style.html" %}
+{% endblock %}
+{% block menu %}
+	{% include "menu.html" %}
+{% endblock %}
+{% block body %}
+<h1>Создание типа</h1>
+<form method="POST">
+    <input type="text" name="name" placeholder="Название">
+    <button type="submit">Сохранить и вернуться на главную</button>
+</form>
+{% endblock %}
+{% block footer %}
+	{% include "footer.html" %}
+{% endblock %}
